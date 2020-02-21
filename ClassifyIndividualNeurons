@@ -1,0 +1,26 @@
+function [Acc_Ind, cM_Ind, eN_Ind, Pred] = ClassifyIndividualNeurons(features, groups, numfeatures); 
+%%%
+%%classification algorithm for individual neurons
+%% O.T. 2006
+
+fprintf('Classifying individual neuron: \n');  
+
+stopF = 0; 
+
+neurons = max(size(numfeatures)) ; 
+  
+%%%dropping / scrambling code
+stopF = 0; 
+for n = 1:neurons
+
+    if numfeatures(n) == 0;      
+    eN_Ind(n) = 0;  Acc_Ind(n) = 0;  cM_Ind{n} = 0;    
+    else                            
+    startF = stopF + 1;                                     %If there are, advance the array through this needlessly complex indexing
+    stopF = startF + numfeatures(n) - 1;    
+    [Acc_Ind(n), cM_Ind{n}] = runSVMinR(features(:, startF:stopF), groups, 'sigmoid'); 
+    eN_Ind(n) = entropy(cM_Ind{n});     
+    fprintf(' %d', n); 
+  %  Pred{n} = load('Pred');
+    end  
+end
